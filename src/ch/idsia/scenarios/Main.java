@@ -3,7 +3,7 @@ package ch.idsia.scenarios;
 import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.agents.Agent;
-import ch.idsia.agents.controllers.ForwardAgent;
+import ch.idsia.agents.controllers.ForwardJumpingAgent;
 
 public final class Main {
     public static void main(String[] args) {
@@ -11,9 +11,10 @@ public final class Main {
 
         // Stage parameters
         marioAIOptions.setLevelDifficulty(0);
+        marioAIOptions.setFlatLevel(true);
 
         // Set Agent
-        final Agent agent = new ForwardAgent();
+        final Agent agent = new ForwardJumpingAgent();
         marioAIOptions.setAgent(agent);
 
         int seed = 99;
