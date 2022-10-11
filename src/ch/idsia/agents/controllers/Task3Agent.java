@@ -1,7 +1,5 @@
 package ch.idsia.agents.controllers;
 
-import ch.idsia.agents.Agent;
-import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.environments.Environment;
 
@@ -20,6 +18,9 @@ public class Task3Agent extends CustomBasicAgent {
   }
 
   public boolean[] getAction() {
+    if (isAboveEnemy()) {
+      moveLeft(5);
+    }
     if (isFrontEnemy()) {
       if (marioMode == 2) {
         fire();
@@ -33,6 +34,7 @@ public class Task3Agent extends CustomBasicAgent {
       action[Mario.KEY_JUMP] = false;
     }
     manageFiring();
+    manageMovingLeft();
     return action;
   }
 

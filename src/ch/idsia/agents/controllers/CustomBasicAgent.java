@@ -7,6 +7,7 @@ import ch.idsia.benchmark.mario.engine.sprites.Mario;
 public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agent {
   private boolean keepFiring = false;
   private boolean willFire = false;
+  private int leftCount = 0;
 
   public CustomBasicAgent(String name) {
     super(name);
@@ -20,6 +21,10 @@ public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agen
 
   protected boolean isEnemy(int r, int c) {
     return getEnemiesCellValue(r, c) > 0;
+  }
+
+  protected boolean isFallingEnemy(int r, int c) {
+    return isEnemy(r, c) && !isObstacle(r + 1, c);
   }
 
   protected boolean isFrontObstacle() {
@@ -43,13 +48,24 @@ public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agen
         || isEnemy(marioEgoRow + 1, marioEgoCol + 2);
   }
 
+  protected boolean isAboveEnemy() {
+    return isFallingEnemy(marioEgoRow - 1, marioEgoCol)
+        || isFallingEnemy(marioEgoRow - 1, marioEgoCol + 1)
+        || isFallingEnemy(marioEgoRow - 2, marioEgoCol)
+        || isFallingEnemy(marioEgoRow - 2, marioEgoCol + 1);
+  }
+
   protected void jump() {
     action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
   }
 
   protected void fire() {
     action[Mario.KEY_SPEED] = false;
-    willFire = true;
+    this.willFire = true;
+  }
+
+  protected void moveLeft(int flame) {
+    this.leftCount = flame;
   }
 
   protected void setKeepFiring(boolean keepFiring) {
@@ -60,9 +76,20 @@ public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agen
   protected void manageFiring() {
     if (this.keepFiring) {
       action[Mario.KEY_SPEED] = !action[Mario.KEY_SPEED];
-    } else if (willFire) {
+    } else if (this.willFire) {
       action[Mario.KEY_SPEED] = true;
-      willFire = false;
+      this.willFire = false;
+    }
+  }
+
+  protected void manageMovingLeft() {
+    if (leftCount > 0) {
+      action[Mario.KEY_LEFT] = true;
+      action[Mario.KEY_RIGHT] = false;
+      leftCount--;
+    } else {
+      action[Mario.KEY_LEFT] = false;
+      action[Mario.KEY_RIGHT] = true;
     }
   }
 }

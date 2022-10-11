@@ -20,6 +20,9 @@ public class Task2Agent extends CustomBasicAgent {
   }
 
   public boolean[] getAction() {
+    if (isAboveEnemy()) {
+
+    }
     if (isFrontObstacle() || isFrontEnemy() || isFrontHole()) {
       action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
     } else {
