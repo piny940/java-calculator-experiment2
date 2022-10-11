@@ -13,9 +13,9 @@ import ch.idsia.benchmark.mario.environments.Environment;
  * Package: ch.idsia.agents.controllers;
  */
 
-public class Task2Agent extends CustomBasicAgent {
-  public Task2Agent() {
-    super("Task2Agent");
+public class Task3Agent extends CustomBasicAgent {
+  public Task3Agent() {
+    super("Task3Agent");
     reset();
   }
 

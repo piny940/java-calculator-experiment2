@@ -1,53 +1,39 @@
 package ch.idsia.agents.controllers;
 
 import ch.idsia.agents.Agent;
-import ch.idsia.benchmark.mario.engine.sprites.Mario;
-import ch.idsia.benchmark.mario.environments.Environment;
+import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
 
 public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agent {
-  private int[] actionCounts = new int[Environment.numberOfKeys];
-
   public CustomBasicAgent(String name) {
     super(name);
   }
 
-  protected boolean[] updateAction() {
-    boolean[] result = new boolean[Environment.numberOfKeys];
-
-    for (int i = 0; i < actionCounts.length; i++) {
-      if (actionCounts[i] > 0) {
-        actionCounts[i]--;
-      }
-      result[i] = actionCounts[i] > 0;
-    }
-    return result;
+  protected boolean isObstacle(int r, int c) {
+    return getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.BRICK
+        || getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.BORDER_CANNOT_PASS_THROUGH
+        || getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.FLOWER_POT_OR_CANNON;
   }
 
-  protected void jump(int flame) {
-    if (flame < 0) {
-      this.actionCounts[Mario.KEY_JUMP] = Integer.MAX_VALUE;
-    } else {
-      this.actionCounts[Mario.KEY_JUMP] = flame;
-    }
+  protected boolean isEnemy(int r, int c) {
+    return getEnemiesCellValue(r, c) > 0;
   }
 
-  protected void moveRight() {
-    this.actionCounts[Mario.KEY_RIGHT] = Integer.MAX_VALUE;
+  protected boolean isFrontObstacle() {
+    return isObstacle(marioEgoRow, marioEgoCol + 1)
+        || isObstacle(marioEgoRow, marioEgoCol + 2)
+        || isObstacle(marioEgoRow + 1, marioEgoCol + 1)
+        || isObstacle(marioEgoRow + 1, marioEgoCol + 2);
   }
 
-  protected void moveLeft(int flame) {
-    if (flame < 0) {
-      this.actionCounts[Mario.KEY_LEFT] = Integer.MAX_VALUE;
-    } else {
-      this.actionCounts[Mario.KEY_LEFT] = flame;
-    }
+  protected boolean isFrontHole() {
+    return !isObstacle(marioEgoRow + 1, marioEgoCol + 1)
+        || !isObstacle(marioEgoRow + 1, marioEgoCol + 2);
   }
 
-  protected void dash(boolean dashing) {
-    if (dashing) {
-      this.actionCounts[Mario.KEY_SPEED] = Integer.MAX_VALUE;
-    } else {
-      this.actionCounts[Mario.KEY_SPEED] = 0;
-    }
+  protected boolean isFrontEnemy() {
+    return isEnemy(marioEgoRow, marioEgoCol + 1)
+        || isEnemy(marioEgoRow, marioEgoCol + 2)
+        || isEnemy(marioEgoRow + 1, marioEgoCol + 1)
+        || isEnemy(marioEgoRow + 1, marioEgoCol + 2);
   }
 }
