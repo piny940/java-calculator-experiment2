@@ -20,11 +20,19 @@ public class Task3Agent extends CustomBasicAgent {
   }
 
   public boolean[] getAction() {
+    if (isFrontEnemy()) {
+      if (marioMode == 2) {
+        fire();
+      } else {
+        jump();
+      }
+    }
     if (isFrontObstacle() || isFrontEnemy() || isFrontHole()) {
-      action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
+      jump();
     } else {
       action[Mario.KEY_JUMP] = false;
     }
+    manageFiring();
     return action;
   }
 
