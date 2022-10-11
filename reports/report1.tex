@@ -28,11 +28,50 @@
 \subsection*{setLevelDifficulty}
 ステージのレベルを変更した。デフォルトのレベルが最低レベルであるレベル0である
 ということがわかった。レベル0ではファイアとジャンプを繰り返しながら一直線に走っていくだけでクリアできたのに対し、
-レベル1では飛びながら襲ってくる敵や落とし穴が現れて単純なコードではクリアできなくなっていた。
+レベル3では飛びながら襲ってくる敵や落とし穴が現れて単純なコードではクリアできなくなっていた。
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]
+    { images/report1/image-diff0.png }
+  \caption[]{Difficulty = 0の時のステージ}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{
+    images/report1/image-diff3.png
+  }
+  \caption[]{Difficulty = 3の時のステージ}
+\end{figure}
+
 
 \subsection*{setBlocksCount}
-setBlocksCountをfalseにしてブロックがないステージを試した。ブロックがないため単調なステージとなっていたが、
+setBlocksCountをfalseにしてブロックがないステージを試した。
+ブロックがないため単調なステージとなっていたが、
 敵にぶつかって死ぬことが何度かあった。
+
+\begin{figure}[h]
+  \centering
+  \includegraphics*[scale=0.6]{
+    images/report1/image-no-block.png
+  }
+  \caption[]{ブロックを無くした場合のステージ}
+\end{figure}
+
+\subsection*{setFlatLevel}
+setFlatLevelをtrueにして地面が平らなステージを試した。
+ブロックがないステージよりもさらに単調なステージとなったが、
+ファイアボールを打ってジャンプをしながら進んでいくだけで
+クリアできるステージになった。
+
+\begin{figure}
+  \centering
+  \includegraphics*[scale=0.6]{
+    images/report1/image-flat-stage.png
+  }
+  \caption[]{地面を平らにした場合のステージ}
+\end{figure}
 
 \section*{すでに実装されているエージェント}
 ForwardAgentの実装を確認した。
