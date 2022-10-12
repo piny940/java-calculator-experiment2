@@ -3,27 +3,22 @@ package ch.idsia.scenarios;
 import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.agents.Agent;
-import ch.idsia.agents.controllers.ForwardJumpingAgent;
+import ch.idsia.agents.LearningWithGA;
 
 public final class Main {
-    public static void main(String[] args) {
-        final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
+  public static void main(String[] args) {
+    final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-        // Stage parameters
-        marioAIOptions.setLevelDifficulty(0);
-        marioAIOptions.setFlatLevel(true);
+    LearningWithGA ga = new LearningWithGA("-lde on -ltb off -ld 2 -ls 0 -le g");
+    ga.learn();
+    // marioAIOptions.setAgent(agent);
 
-        // Set Agent
-        final Agent agent = new ForwardJumpingAgent();
-        marioAIOptions.setAgent(agent);
+    // marioAIOptions.setArgs("-lde on -ltb off -ld 2 -ls 0 -le g");
 
-        int seed = 99;
-        marioAIOptions.setLevelRandSeed(seed);
-
-        final BasicTask basicTask = new BasicTask(marioAIOptions);
-        basicTask.setOptionsAndReset(marioAIOptions);
-        basicTask.doEpisodes(1, true, 1);
-        System.exit(0);
-    }
+    // final BasicTask basicTask = new BasicTask(marioAIOptions);
+    // basicTask.setOptionsAndReset(marioAIOptions);
+    // basicTask.doEpisodes(1, true, 1);
+    System.exit(0);
+  }
 
 }
