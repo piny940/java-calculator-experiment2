@@ -1,0 +1,17 @@
+services:
+  app:
+    build: ${PWD}
+    image: java-calculator-experiment2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    container_name: java-calculator-experiment2
+    stdin_open: true
+    tty: true
+    volumes:
+      - ${PWD}:/java-calculator-experiment2
+    working_dir: /java-calculator-experiment2
