@@ -40,37 +40,33 @@ import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
  * Time: 4:03:46 AM
  */
 
-public class IgnoreObstacleAgent extends BasicMarioAIAgent implements Agent
-{
-int trueJumpCounter = 0;
-int trueSpeedCounter = 0;
+public class IgnoreObstacleAgent extends BasicMarioAIAgent implements Agent {
+	int trueJumpCounter = 0;
+	int trueSpeedCounter = 0;
 
-public IgnoreObstacleAgent()
-{
-    super("IgnoreObstacleAgent");
-    reset();
-}
-
-public void reset()
-{
-    action = new boolean[Environment.numberOfKeys];
-    action[Mario.KEY_RIGHT] = true;
-}
-
-public boolean isObstacle(int r, int c){
-	return getReceptiveFieldCellValue(r, c)==GeneralizerLevelScene.BRICK
-			|| getReceptiveFieldCellValue(r, c)==GeneralizerLevelScene.BORDER_CANNOT_PASS_THROUGH
-			|| getReceptiveFieldCellValue(r, c)==GeneralizerLevelScene.FLOWER_POT_OR_CANNON
-			|| getReceptiveFieldCellValue(r, c)==GeneralizerLevelScene.LADDER;
-}
-
-public boolean[] getAction()
-{
-	if(isObstacle(marioEgoRow, marioEgoCol + 1) || 
-			getEnemiesCellValue(marioEgoRow, marioEgoCol + 2) != Sprite.KIND_NONE
-			|| getEnemiesCellValue(marioEgoRow, marioEgoCol + 1) != Sprite.KIND_NONE){
-		action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
+	public IgnoreObstacleAgent() {
+		super("IgnoreObstacleAgent");
+		reset();
 	}
-    return action;
-}
+
+	public void reset() {
+		action = new boolean[Environment.numberOfKeys];
+		action[Mario.KEY_RIGHT] = true;
+	}
+
+	public boolean isObstacle(int r, int c) {
+		return getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.BRICK
+				|| getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.BORDER_CANNOT_PASS_THROUGH
+				|| getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.FLOWER_POT_OR_CANNON
+				|| getReceptiveFieldCellValue(r, c) == GeneralizerLevelScene.LADDER;
+	}
+
+	public boolean[] getAction() {
+		if (isObstacle(marioEgoRow, marioEgoCol + 1) ||
+				getEnemiesCellValue(marioEgoRow, marioEgoCol + 2) != Sprite.KIND_NONE
+				|| getEnemiesCellValue(marioEgoRow, marioEgoCol + 1) != Sprite.KIND_NONE) {
+			action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
+		}
+		return action;
+	}
 }

@@ -52,7 +52,11 @@ public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agen
     return isFallingEnemy(marioEgoRow - 1, marioEgoCol)
         || isFallingEnemy(marioEgoRow - 1, marioEgoCol + 1)
         || isFallingEnemy(marioEgoRow - 2, marioEgoCol)
-        || isFallingEnemy(marioEgoRow - 2, marioEgoCol + 1);
+        || isFallingEnemy(marioEgoRow - 2, marioEgoCol + 1)
+        || isFallingEnemy(marioEgoRow - 3, marioEgoCol)
+        || isFallingEnemy(marioEgoRow - 3, marioEgoCol + 1)
+        || isFallingEnemy(marioEgoRow - 4, marioEgoCol)
+        || isFallingEnemy(marioEgoRow - 4, marioEgoCol + 1);
   }
 
   protected void jump() {
@@ -79,6 +83,10 @@ public abstract class CustomBasicAgent extends BasicMarioAIAgent implements Agen
     } else if (this.willFire) {
       action[Mario.KEY_SPEED] = true;
       this.willFire = false;
+    } else {
+      if (!action[Mario.KEY_SPEED]) {
+        action[Mario.KEY_SPEED] = true;
+      }
     }
   }
 

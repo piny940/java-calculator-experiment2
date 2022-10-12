@@ -1,7 +1,6 @@
 package ch.idsia.agents.controllers;
 
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
-import ch.idsia.benchmark.mario.environments.Environment;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,14 +18,16 @@ public class Task3Agent extends CustomBasicAgent {
 
   public boolean[] getAction() {
     if (isAboveEnemy()) {
-      moveLeft(5);
+      moveLeft(10);
     }
     if (isFrontEnemy()) {
       if (marioMode == 2) {
-        fire();
+        setKeepFiring(true);
       } else {
         jump();
       }
+    } else {
+      setKeepFiring(false);
     }
     if (isFrontObstacle() || isFrontEnemy() || isFrontHole()) {
       jump();
@@ -39,7 +40,6 @@ public class Task3Agent extends CustomBasicAgent {
   }
 
   public void reset() {
-    action = new boolean[Environment.numberOfKeys];
     action[Mario.KEY_RIGHT] = true;
     action[Mario.KEY_SPEED] = true;
   }
