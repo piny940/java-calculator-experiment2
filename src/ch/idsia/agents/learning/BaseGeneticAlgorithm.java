@@ -2,6 +2,10 @@ package ch.idsia.agents.learning;
 
 import java.util.Random;
 
+import ch.idsia.benchmark.tasks.BasicTask;
+import ch.idsia.tools.EvaluationInfo;
+import ch.idsia.tools.MarioAIOptions;
+
 public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
   private final int SIZE = 100;
   private final int ELITE_NUM = 2;
@@ -104,7 +108,13 @@ public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
   }
 
   private void evaluate() {
+    for (int i = 0; i < SIZE; i++) {
+      BasicTask basicTask = playMario(currentGeneration[i], false);
 
+      // 評価値
+      EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
+      currentGeneration[i].setFitness(evaluationInfo.distancePassedCells);
+    }
   }
 
   private void uniformCross(int[] parentsIndex, int resultIndex) {
@@ -120,6 +130,24 @@ public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
         nextGeneration[resultIndex].setGene(j, parentsGeneB);
       }
     }
+  }
+
+  private BasicTask playMario(GAAgent agent, boolean visual) {
+    MarioAIOptions marioAIOptions = new MarioAIOptions();
+    BasicTask basicTask = new BasicTask(marioAIOptions);
+
+    /* プレイ画面出力するか否か */
+    marioAIOptions.setVisualization(visual);
+
+    marioAIOptions.setArgs(this.marioAIOptions);
+    marioAIOptions.setAgent(agent);
+    basicTask.setOptionsAndReset(marioAIOptions);
+
+    if (!basicTask.runSingleEpisode(1)) {
+      System.out.println("MarioAI: out of computational time"
+          + " per action! Agent disqualified!");
+    }
+    return basicTask;
   }
 
   private double scaleFitness(int fitness) {

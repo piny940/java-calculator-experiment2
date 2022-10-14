@@ -2,9 +2,7 @@ package ch.idsia.agents.learning;
 
 import java.util.Random;
 
-import ch.idsia.agents.Agent;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
-import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
 import ch.idsia.benchmark.mario.environments.Environment;
 
 public class GAAgent extends BasicMarioAIAgent {
@@ -29,6 +27,10 @@ public class GAAgent extends BasicMarioAIAgent {
 
   public int getFitness() {
     return this.fitness;
+  }
+
+  public void setFitness(int fitness) {
+    this.fitness = fitness;
   }
 
   public int compareTo(Object object) {
