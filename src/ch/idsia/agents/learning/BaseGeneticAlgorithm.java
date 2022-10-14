@@ -1,12 +1,14 @@
 package ch.idsia.agents.learning;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
+import ch.idsia.utils.FileManager;
 
-public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
+public class BaseGeneticAlgorithm implements GeneticAlgorithm {
   private final int SIZE = 100;
   private final int ELITE_NUM = 2;
   private final int MAX_GENERATION = 10000;
@@ -30,6 +32,14 @@ public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
     for (int generation = 0; generation < MAX_GENERATION; generation++) {
       evaluate();
 
+      Arrays.sort(currentGeneration);
+
+      // 現世代での最高値を出力
+      System.out.println(
+          "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
+              + "currentGeneration[0].distance : "
+              + currentGeneration[0].getDistance());
+
       // 2個体エリートを残す
       for (int i = 0; i < ELITE_NUM; i++) {
         nextGeneration[i] = currentGeneration[i].clone();
@@ -42,6 +52,16 @@ public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
         if (r.nextFloat() < MUTATE_PROB) {
           mutate(nextAgentIndex);
         }
+      }
+
+      currentGeneration = nextGeneration;
+
+      if (generation == MAX_GENERATION) {
+        System.out.println("Generation[" + generation + "] : Playing!");
+        playMario(currentGeneration[0], true);
+        FileManager.write(currentGeneration[0], "gene.xml");
+        System.out.println("Learning is stopped");
+        break;
       }
     }
   }
@@ -113,7 +133,9 @@ public abstract class BaseGeneticAlgorithm implements GeneticAlgorithm {
 
       // 評価値
       EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
+
       currentGeneration[i].setFitness(evaluationInfo.distancePassedCells);
+      currentGeneration[i].setDistance(evaluationInfo.distancePassedCells);
     }
   }
 

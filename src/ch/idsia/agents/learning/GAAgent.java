@@ -11,6 +11,7 @@ public class GAAgent extends BasicMarioAIAgent {
   private final int GENE_LENGTH = 1 << INPUT_NUM;
   private int fitness = 0;
   private int[] gene = new int[GENE_LENGTH];
+  private int distance = 0;
 
   private Random r = new Random();
 
@@ -44,6 +45,14 @@ public class GAAgent extends BasicMarioAIAgent {
 
   public void setGene(int index, int[] gene) {
     this.gene[index] = gene[index];
+  }
+
+  public int getDistance() {
+    return this.distance;
+  }
+
+  public void setDistance(int distance) {
+    this.distance = distance;
   }
 
   public boolean[] getAction() {
