@@ -40,12 +40,17 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
               + "currentGeneration[0].distance : "
               + currentGeneration[0].getDistance());
 
+      nextGeneration = new GAAgent[SIZE];
+      for (int i = ELITE_NUM; i < SIZE; i++) {
+        nextGeneration[i] = new GAAgent();
+      }
+
       // 2個体エリートを残す
       for (int i = 0; i < ELITE_NUM; i++) {
         nextGeneration[i] = currentGeneration[i].clone();
       }
 
-      for (int nextAgentIndex = ELITE_NUM; nextAgentIndex < SIZE; nextAgentIndex++) {
+      for (int nextAgentIndex = ELITE_NUM; nextAgentIndex < SIZE; nextAgentIndex += 2) {
         int[] parentsIndex = select();
         cross(parentsIndex, nextAgentIndex);
 
@@ -140,16 +145,41 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
   }
 
   private void uniformCross(int[] parentsIndex, int resultIndex) {
+    // int sum = parentsIndex[0] + parentsIndex[1];
+    // for (int j = 0; j < GENE_LENGTH; j++) {
+    // // スコアが高い遺伝子ほど選ばれやすくする
+    // int ran = r.nextInt(sum);
+    // if (ran > parentsIndex[0]) {
+    // int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
+    // this.nextGeneration[resultIndex].setGene(j, parentsGeneA);
+    // } else {
+    // int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
+    // this.nextGeneration[resultIndex].setGene(j, parentsGeneB);
+    // }
+    // }
+    int geneLength = (1 << 16);
+
     int sum = parentsIndex[0] + parentsIndex[1];
-    for (int j = 0; j < GENE_LENGTH; j++) {
-      // スコアが高い遺伝子ほど選ばれやすくする
-      int ran = r.nextInt(sum);
-      if (ran > parentsIndex[0]) {
-        int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
-        nextGeneration[resultIndex].setGene(j, parentsGeneA);
-      } else {
-        int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
-        nextGeneration[resultIndex].setGene(j, parentsGeneB);
+    float roulette = 1 - (float) parentsIndex[0] / (float) sum;
+    // System.out.println("parentsGene[0] : "+parentsGene[0]);
+    // System.out.println("parentsGene[1] : "+parentsGene[1]);
+    // System.out.println("roulette : "+roulette);
+    // int Acount=0,Bcount=0;
+    for (int k = 0; k < 2; k++) { // 2回繰り返す
+      for (int j = 0; j < geneLength; j++) {
+
+        float ran = (float) r.nextInt(sum) / (float) sum; // ルーレット作成
+        if (ran < roulette) { // 親A
+          // Acount++;
+          int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
+          nextGeneration[resultIndex + k].setGene(j, parentsGeneA);
+        } else if (ran > roulette) { // 親B
+          // Bcount++;
+          int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
+          nextGeneration[resultIndex + k].setGene(j, parentsGeneB);
+        } else { // エラー処理?
+
+        }
       }
     }
   }

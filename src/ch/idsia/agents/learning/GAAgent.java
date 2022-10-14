@@ -5,7 +5,7 @@ import java.util.Random;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 
-public class GAAgent extends BasicMarioAIAgent {
+public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable {
   private static String name = "GAAgent";
   private final int INPUT_NUM = 16;
   private final int GENE_LENGTH = 1 << INPUT_NUM;

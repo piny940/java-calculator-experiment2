@@ -31,26 +31,28 @@ import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.agents.Agent;
 import ch.idsia.agents.controllers.IgnoreObstacleAgent;
+import ch.idsia.agents.learning.GATask4_1;
 
 /**
- * Created by IntelliJ IDEA. User: Sergey Karakovskiy, sergey at idsia dot ch Date: Mar 17, 2010 Time: 8:28:00 AM
+ * Created by IntelliJ IDEA. User: Sergey Karakovskiy, sergey at idsia dot ch
+ * Date: Mar 17, 2010 Time: 8:28:00 AM
  * Package: ch.idsia.scenarios
  */
-public final class MainTask4_1
-{
-public static void main(String[] args)
-{
+public final class MainTask4_1 {
+  public static void main(String[] args) {
     final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
+    GATask4_1 ga = new GATask4_1("-lde on -ltb off -ld 2 -ls 0 -le g");
+    ga.learn();
 
-    final Agent agent = new IgnoreObstacleAgent();
-    marioAIOptions.setAgent(agent);
-    
-    marioAIOptions.setArgs("-lde on -ltb off -ld 2 -ls 0 -le g");
-    
-    final BasicTask basicTask = new BasicTask(marioAIOptions);
-    basicTask.setOptionsAndReset(marioAIOptions);
-    basicTask.doEpisodes(1,true,1);
-    System.exit(0);
-}
+    // final Agent agent = new IgnoreObstacleAgent();
+    // marioAIOptions.setAgent(agent);
+
+    // marioAIOptions.setArgs("-lde on -ltb off -ld 2 -ls 0 -le g");
+
+    // final BasicTask basicTask = new BasicTask(marioAIOptions);
+    // basicTask.setOptionsAndReset(marioAIOptions);
+    // basicTask.doEpisodes(1,true,1);
+    // System.exit(0);
+  }
 
 }
