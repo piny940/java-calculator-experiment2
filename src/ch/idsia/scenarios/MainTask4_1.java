@@ -31,6 +31,7 @@ import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.agents.Agent;
 import ch.idsia.agents.controllers.IgnoreObstacleAgent;
+import ch.idsia.agents.learning.GA4_1Agent;
 import ch.idsia.agents.learning.GATask4_1;
 
 /**
@@ -44,7 +45,8 @@ public final class MainTask4_1 {
     GATask4_1 ga = new GATask4_1("-lde on -ltb off -ld 2 -ls 0 -le g");
     ga.learn();
 
-    // final Agent agent = new IgnoreObstacleAgent();
+    // final GA4_1Agent agent = new GA4_1Agent();
+    // agent.setGeneFromFile("GATask4_1-2022-10-15_10-44-35.xml");
     // marioAIOptions.setAgent(agent);
 
     // marioAIOptions.setArgs("-lde on -ltb off -ld 2 -ls 0 -le g");

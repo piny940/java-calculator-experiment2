@@ -10,7 +10,12 @@ public class GA4_1Agent extends GAAgent {
 
   @Override
   public boolean[] getAction() {
-    updateActionFromGene(gene);
+
+    if (marioFloatPos[0] < 120) {
+      updateActionFromGene(goRightGene);
+    } else {
+      updateActionFromGene(gene);
+    }
     return action;
   }
 
