@@ -1,13 +1,14 @@
 package ch.idsia.agents.learning;
 
 public class GoUpAgent extends GAAgent {
-  private float POINT_PER_SECOND_PER_HEIGHT = 2f;
+  private float POINT_PER_SECOND_PER_HEIGHT = 0;
   private float heightPoint = 0;
   private float maxHeight = 0;
   private float MAX_HEIGHT_POINT_PER_HEIGHT = 10;
 
   public void setFitness() {
-    this.fitness = distancePassedCells + heightPoint / timeSpent + maxHeight * MAX_HEIGHT_POINT_PER_HEIGHT;
+    this.fitness = (distancePassedCells - 112) + heightPoint / timeSpent
+        + (maxHeight) * MAX_HEIGHT_POINT_PER_HEIGHT;
   }
 
   protected void updateHeightPoint() {
