@@ -10,10 +10,10 @@ import ch.idsia.benchmark.mario.environments.Environment;
 
 public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable {
   private static String name = "GAAgent";
-  private final int INPUT_NUM = 16;
-  private final int GENE_LENGTH = 1 << INPUT_NUM;
+  protected final int INPUT_NUM = 16;
+  protected final int GENE_LENGTH = 1 << INPUT_NUM;
   private int fitness = 0;
-  private int[] gene = new int[GENE_LENGTH];
+  protected int[] gene = new int[GENE_LENGTH];
   private int distance = 0;
 
   private Random r = new Random();
@@ -21,7 +21,6 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
   public GAAgent() {
     super(name);
     initializeGene();
-    loadGene("GATask4_1-2022-10-15_10-44-35.xml");
   }
 
   private void initializeGene() {
@@ -121,7 +120,7 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
     return result;
   }
 
-  private void updateActionFromGene(int[] gene) {
+  protected void updateActionFromGene(int[] gene) {
     int input = getGeneIndex();
     int act = gene[input]; // 遺伝子のinput番目の数値を読み取る
     for (int i = 0; i < Environment.numberOfKeys; i++) {
@@ -136,7 +135,7 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
     return (scene[realX][realY] != 0) ? 1 : 0;
   }
 
-  private int[] loadGene(String filename) {
+  protected int[] loadGene(String filename) {
     int[] gene = new int[GENE_LENGTH];
 
     try {
