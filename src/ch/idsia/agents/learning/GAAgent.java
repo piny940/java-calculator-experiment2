@@ -12,7 +12,7 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
   private static String name = "GAAgent";
   protected final int INPUT_NUM = 16;
   protected final int GENE_LENGTH = 1 << INPUT_NUM;
-  protected int fitness = 0;
+  protected float fitness = 0;
   protected int[] gene = new int[GENE_LENGTH];
   private int distance = 0;
 
@@ -58,7 +58,7 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
     }
   }
 
-  public int getFitness() {
+  public float getFitness() {
     return this.fitness;
   }
 
@@ -66,7 +66,9 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
 
   public int compareTo(Object object) {
     GAAgent otherAgent = (GAAgent) object;
-    return -(this.fitness - otherAgent.getFitness());
+    if (this.fitness == otherAgent.getFitness())
+      return 0;
+    return this.fitness > otherAgent.getFitness() ? -1 : 1;
   }
 
   public int[] getGene() {

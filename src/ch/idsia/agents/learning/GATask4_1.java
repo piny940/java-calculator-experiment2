@@ -16,6 +16,7 @@ public class GATask4_1 {
   private final float MUTATE_PROB = 0.1f;
   private final int INPUT_NUM = 16;
   private final int GENE_LENGTH = 1 << INPUT_NUM;
+  private final int CHECK_PLAY_CYCLE = 10;
   private GA4_1Agent[] currentGeneration = new GA4_1Agent[SIZE];
   private GA4_1Agent[] nextGeneration = new GA4_1Agent[SIZE];
   private String marioAIOptions;
@@ -42,7 +43,7 @@ public class GATask4_1 {
           "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
               + "currentGeneration[0]Distance : "
               + currentGeneration[0].getDistance());
-      if (generation % 100 == 0) {
+      if ((generation + 1) % CHECK_PLAY_CYCLE == 0) {
         writeFile();
         playMario(currentGeneration[0], true);
       }
@@ -190,7 +191,7 @@ public class GATask4_1 {
     return basicTask;
   }
 
-  private double scaleFitness(int fitness) {
+  private double scaleFitness(float fitness) {
     return fitness;
   }
 

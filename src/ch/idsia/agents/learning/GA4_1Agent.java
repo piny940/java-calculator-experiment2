@@ -1,6 +1,6 @@
 package ch.idsia.agents.learning;
 
-public class GA4_1Agent extends GoRightAgent {
+public class GA4_1Agent extends GoUpAgent {
   int[] goRightGene = new int[GENE_LENGTH];
 
   public GA4_1Agent() {
@@ -11,9 +11,10 @@ public class GA4_1Agent extends GoRightAgent {
   @Override
   public boolean[] getAction() {
 
-    if (distancePassedCells < 120) {
+    if (distancePassedCells < 100) {
       updateActionFromGene(goRightGene);
     } else {
+      updateHeightPoint();
       updateActionFromGene(gene);
     }
     return action;
