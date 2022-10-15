@@ -15,7 +15,7 @@ public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
   protected final int MAX_GENERATION = 10000;
   protected final int CHECK_PLAY_CYCLE = 10;
   protected final int GOAL_POS = 256;
-  private final float MUTATE_PROB = 0.1f;
+  private final float MUTATE_PROB = 0.15f;
   private final int INPUT_NUM = 16;
   private final int GENE_LENGTH = 1 << INPUT_NUM;
   private GAAgent[] currentGeneration;
@@ -32,9 +32,9 @@ public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
     this.currentGeneration = initializeNextGeneration();
   }
 
-  protected abstract GAAgent[] initializeCurrentGeneration();
+  protected abstract CustomGAAgent[] initializeCurrentGeneration();
 
-  protected abstract GAAgent[] initializeNextGeneration();
+  protected abstract CustomGAAgent[] initializeNextGeneration();
 
   public void learn() {
     for (int generation = 0; generation < MAX_GENERATION; generation++) {

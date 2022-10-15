@@ -8,7 +8,7 @@ import java.util.Scanner;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 
-public abstract class GAAgent extends BasicMarioAIAgent implements Comparable<GAAgent>, Cloneable {
+public abstract class GAAgent extends BasicMarioAIAgent implements Comparable<GAAgent> {
   private static String name = "GAAgent";
   protected final int INPUT_NUM = 16;
   protected final int GENE_LENGTH = 1 << INPUT_NUM;
@@ -92,7 +92,6 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable<GA
   }
 
   public boolean[] getAction() {
-
     updateActionFromGene(gene);
 
     return action;

@@ -32,9 +32,4 @@ public class GA4_1Agent extends GoUpAgent {
     }
     return action;
   }
-
-  @Override
-  public GA4_1Agent clone() {
-    return (GA4_1Agent) super.clone();
-  }
 }

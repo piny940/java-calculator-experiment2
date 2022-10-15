@@ -9,7 +9,7 @@ public class GATask4_1 extends BaseGeneticAlgorithm<GA4_1Agent> {
     super(marioAIOptions, "GATask4_1");
   }
 
-  protected GAAgent[] initializeCurrentGeneration() {
+  protected GA4_1Agent[] initializeCurrentGeneration() {
     GA4_1Agent[] current = new GA4_1Agent[SIZE];
 
     for (int i = 0; i < SIZE; i++) {
@@ -19,7 +19,7 @@ public class GATask4_1 extends BaseGeneticAlgorithm<GA4_1Agent> {
     return current;
   }
 
-  protected GAAgent[] initializeNextGeneration() {
+  protected GA4_1Agent[] initializeNextGeneration() {
     GA4_1Agent[] next = new GA4_1Agent[SIZE];
 
     for (int i = 0; i < SIZE; i++) {
