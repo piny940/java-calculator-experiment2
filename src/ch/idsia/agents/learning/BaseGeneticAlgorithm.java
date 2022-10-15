@@ -9,24 +9,24 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.utils.FileManager;
 
-public class BaseGeneticAlgorithm {
+public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
   private final int SIZE = 100;
   private final int ELITE_NUM = 2;
   private final int MAX_GENERATION = 10000;
   private final float MUTATE_PROB = 0.1f;
   private final int INPUT_NUM = 16;
   private final int GENE_LENGTH = 1 << INPUT_NUM;
-  private GAAgent[] currentGeneration = new GAAgent[SIZE];
-  private GAAgent[] nextGeneration = new GAAgent[SIZE];
+  private GAAgent[] currentGeneration;
+  private GAAgent[] nextGeneration;
   private String marioAIOptions;
   private String name;
   private Random r = new Random();
 
-  public BaseGeneticAlgorithm(String marioAIOptions, String name) {
-    for (int i = 0; i < SIZE; i++) {
-      currentGeneration[i] = new GAAgent();
-    }
-
+  public BaseGeneticAlgorithm(String marioAIOptions, String name,
+      CustomGAAgent[] initialCurrentGeneration,
+      CustomGAAgent[] initialNextGeneration) {
+    this.currentGeneration = initialCurrentGeneration;
+    this.nextGeneration = initialNextGeneration;
     this.marioAIOptions = marioAIOptions;
     this.name = name;
   }
@@ -140,14 +140,11 @@ public class BaseGeneticAlgorithm {
   }
 
   private void updateNextGeneration() {
-    nextGeneration = new GAAgent[SIZE];
-    for (int i = ELITE_NUM; i < SIZE; i++) {
-      nextGeneration[i] = new GAAgent();
-    }
+    initiateNextGeneration();
 
     // 2個体エリートを残す
     for (int i = 0; i < ELITE_NUM; i++) {
-      nextGeneration[i] = currentGeneration[i].clone();
+      nextGeneration[i].copyGene(currentGeneration[i]);
     }
 
     for (int nextAgentIndex = ELITE_NUM; nextAgentIndex < SIZE; nextAgentIndex += 2) {
@@ -191,8 +188,17 @@ public class BaseGeneticAlgorithm {
     return basicTask;
   }
 
-  private double scaleFitness(int fitness) {
+  private double scaleFitness(float fitness) {
     return fitness;
+  }
+
+  private void initiateNextGeneration() {
+    GAAgent[] tmp = currentGeneration;
+    currentGeneration = nextGeneration;
+    nextGeneration = tmp;
+    for (int i = 0; i < SIZE; i++) {
+      nextGeneration[i].initializeGene();
+    }
   }
 
   private void writeFile() {

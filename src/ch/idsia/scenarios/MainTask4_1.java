@@ -43,7 +43,7 @@ public final class MainTask4_1 {
   public static void main(String[] args) {
     final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
     GATask4_1 ga = new GATask4_1("-lde on -ltb off -ld 2 -ls 0 -le g");
-    // ga.learn();
+    ga.learn();
 
     final GA4_1Agent agent = new GA4_1Agent();
     marioAIOptions.setAgent(agent);

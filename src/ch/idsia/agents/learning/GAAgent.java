@@ -8,7 +8,7 @@ import java.util.Scanner;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 
-public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable {
+public abstract class GAAgent extends BasicMarioAIAgent implements Comparable<GAAgent>, Cloneable {
   private static String name = "GAAgent";
   protected final int INPUT_NUM = 16;
   protected final int GENE_LENGTH = 1 << INPUT_NUM;
@@ -23,7 +23,7 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
     initializeGene();
   }
 
-  private void initializeGene() {
+  public void initializeGene() {
     int random = r.nextInt(8);
 
     /* geneの初期値は乱数(0から31)で取得 */
@@ -53,8 +53,13 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
         case 7:
           gene[i] = 26;
           break;
-
       }
+    }
+  }
+
+  public void copyGene(GAAgent otherAgent) {
+    for (int i = 0; i < GENE_LENGTH; i++) {
+      setGene(i, otherAgent.getGene());
     }
   }
 
@@ -64,8 +69,7 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, C
 
   public abstract void setFitness();
 
-  public int compareTo(Object object) {
-    GAAgent otherAgent = (GAAgent) object;
+  public int compareTo(GAAgent otherAgent) {
     if (this.fitness == otherAgent.getFitness())
       return 0;
     return this.fitness > otherAgent.getFitness() ? -1 : 1;
