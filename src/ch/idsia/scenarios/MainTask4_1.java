@@ -51,7 +51,7 @@ public final class MainTask4_1 {
 
     // final BasicTask basicTask = new BasicTask(marioAIOptions);
     // basicTask.setOptionsAndReset(marioAIOptions);
-    // basicTask.doEpisodes(1,true,1);
+    // basicTask.doEpisodes(1, true, 1);
     // System.exit(0);
   }
 

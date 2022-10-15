@@ -10,6 +10,7 @@ import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.benchmark.tasks.LearningTask;
 import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
+import ch.idsia.utils.FileController;
 import ch.idsia.utils.FileManager;
 import ch.idsia.utils.wox.serial.Easy;
 
@@ -65,7 +66,7 @@ public class LearningWithGA implements LearningAgent {
 
 			/* 100個体の評価 */
 
-			compFit();
+			evaluate();
 			GAAgent nextagents[] = new GAAgent[SIZE];
 			for (int i = ELITE_NUM; i < SIZE; i++) {
 				nextagents[i] = new GAAgent();
@@ -88,10 +89,12 @@ public class LearningWithGA implements LearningAgent {
 
 			/* 突然変異 */
 			mutate();
+			bestAgent = agents[0].clone();
 
 			int EndEpoch = 10000;
-			if (generation % 100 == 0) {
+			if (generation % 100 == 99) {
 				System.out.println("Generation[" + generation + "] : Playing!");
+				halfwayPlayMario(bestAgent);
 				writeFile();
 			}
 			if (generation == EndEpoch) {
@@ -101,9 +104,7 @@ public class LearningWithGA implements LearningAgent {
 				System.out.println("Learning is stopped");
 				break;
 			}
-
 		}
-
 	}
 
 	/*
@@ -111,7 +112,7 @@ public class LearningWithGA implements LearningAgent {
 	 * その結果を降順にソート．もし過去の最高評価額(fmax)を超える個体が生成
 	 * できたら，xmlファイルを生成する．xml生成はwriteFileメソッドで行う．
 	 */
-	private void compFit() {
+	private void evaluate() {
 
 		/* GAAgents[i]をプレイさせる */
 		MarioAIOptions marioAIOptions = new MarioAIOptions();
@@ -136,7 +137,7 @@ public class LearningWithGA implements LearningAgent {
 
 			/* 評価値(距離)をセット */
 			EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
-			agents[i].setFitness(evaluationInfo.distancePassedCells);
+			agents[i].setFitness(compFit(basicTask));
 
 			agents[i].setDistance(evaluationInfo.distancePassedCells);
 
@@ -151,14 +152,20 @@ public class LearningWithGA implements LearningAgent {
 		System.out.println(
 				"agents[0]Fitness : " + presentBestAgentDistance + "\n" + "agents[0].distance : " + agents[0].getDistance());
 
-		if (presentBestAgentDistance > fmax) {
-			bestAgent = agents[0].clone(); // bestAgentを更新
-			fmax = presentBestAgentDistance; // fmax更新
-			writeFile(); // bestAgentのxmlを出力
-			System.out.println("fmax : " + fmax);
-		}
-		return;
+		// if (presentBestAgentDistance > fmax) {
+		// bestAgent = agents[0].clone(); // bestAgentを更新
+		// fmax = presentBestAgentDistance; // fmax更新
+		// writeFile(); // bestAgentのxmlを出力
+		// System.out.println("fmax : " + fmax);
+		// }
+		// return;
 
+	}
+
+	private int compFit(BasicTask basicTask) {
+		EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
+
+		return evaluationInfo.distancePassedCells;
 	}
 
 	/*
@@ -308,7 +315,7 @@ public class LearningWithGA implements LearningAgent {
 	private void writeFile() {
 		String fileName = name + "-"
 				+ GlobalOptions.getTimeStamp() + ".xml";
-		FileManager.write(bestAgent, fileName);
+		FileController.write(bestAgent, fileName);
 	}
 
 	@Override

@@ -1,6 +1,9 @@
 package ch.idsia.agents;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
@@ -167,6 +170,22 @@ public class GAAgent extends BasicMarioAIAgent
     return distance;
   }
 
+  public void loadGene(String filename) {
+    try {
+      File inputFile = new File(filename);
+      Scanner scanner = new Scanner(inputFile);
+
+      for (int i = 0; i < 1 << inputNum; i++) {
+        String line = scanner.next();
+        setGene(i, Byte.valueOf(line));
+      }
+
+      scanner.close();
+    } catch (FileNotFoundException ex) {
+      System.out.println("File not found");
+    }
+  }
+
   @Override
   public Evolvable getNewInstance() {
     // TODO 自動生成されたメソッド・スタブ
@@ -197,5 +216,4 @@ public class GAAgent extends BasicMarioAIAgent
     // TODO 自動生成されたメソッド・スタブ
     return null;
   }
-
 }

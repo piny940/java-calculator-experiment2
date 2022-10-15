@@ -17,12 +17,41 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
 
   public GAAgent() {
     super(name);
-    initiateGene();
+    initializeGene();
   }
 
-  private void initiateGene() {
+  private void initializeGene() {
+    int random = r.nextInt(8);
+
+    /* geneの初期値は乱数(0から31)で取得 */
     for (int i = 0; i < GENE_LENGTH; i++) {
-      gene[i] = r.nextInt(1 << Environment.numberOfKeys - 1);
+      switch (random) {
+        case 0:
+          gene[i] = 0;
+          break;
+        case 1:
+          gene[i] = 2;
+          break;
+        case 2:
+          gene[i] = 8;
+          break;
+        case 3:
+          gene[i] = 10;
+          break;
+        case 4:
+          gene[i] = 16;
+          break;
+        case 5:
+          gene[i] = 18;
+          break;
+        case 6:
+          gene[i] = 24;
+          break;
+        case 7:
+          gene[i] = 26;
+          break;
+
+      }
     }
   }
 

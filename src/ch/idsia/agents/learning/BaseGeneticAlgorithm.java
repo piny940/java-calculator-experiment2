@@ -3,6 +3,7 @@ package ch.idsia.agents.learning;
 import java.util.Arrays;
 import java.util.Random;
 
+import ch.idsia.benchmark.mario.engine.GlobalOptions;
 import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
@@ -18,18 +19,21 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
   private GAAgent[] currentGeneration = new GAAgent[SIZE];
   private GAAgent[] nextGeneration = new GAAgent[SIZE];
   private String marioAIOptions;
+  private String name;
   private Random r = new Random();
 
-  public BaseGeneticAlgorithm(String marioAIOptions) {
+  public BaseGeneticAlgorithm(String marioAIOptions, String name) {
     for (int i = 0; i < SIZE; i++) {
       currentGeneration[i] = new GAAgent();
     }
 
     this.marioAIOptions = marioAIOptions;
+    this.name = name;
   }
 
   public void learn() {
     for (int generation = 0; generation < MAX_GENERATION; generation++) {
+      System.out.println("Generation" + generation);
       evaluate();
 
       Arrays.sort(currentGeneration);
@@ -37,27 +41,14 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
       // 現世代での最高値を出力
       System.out.println(
           "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
-              + "currentGeneration[0].distance : "
+              + "currentGeneration[0]Distance : "
               + currentGeneration[0].getDistance());
-
-      nextGeneration = new GAAgent[SIZE];
-      for (int i = ELITE_NUM; i < SIZE; i++) {
-        nextGeneration[i] = new GAAgent();
+      if (generation % 100 == 99) {
+        writeFile();
+        playMario(currentGeneration[0], true);
       }
 
-      // 2個体エリートを残す
-      for (int i = 0; i < ELITE_NUM; i++) {
-        nextGeneration[i] = currentGeneration[i].clone();
-      }
-
-      for (int nextAgentIndex = ELITE_NUM; nextAgentIndex < SIZE; nextAgentIndex += 2) {
-        int[] parentsIndex = select();
-        cross(parentsIndex, nextAgentIndex);
-
-        if (r.nextFloat() < MUTATE_PROB) {
-          mutate(nextAgentIndex);
-        }
-      }
+      updateNextGeneration();
 
       currentGeneration = nextGeneration;
 
@@ -138,48 +129,48 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
 
       // 評価値
       EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
-
+      if (evaluationInfo == null) {
+        System.out.println(basicTask.getEvaluationInfo());
+        System.out.println(basicTask);
+        return;
+      }
       currentGeneration[i].setFitness(evaluationInfo.distancePassedCells);
       currentGeneration[i].setDistance(evaluationInfo.distancePassedCells);
     }
   }
 
+  private void updateNextGeneration() {
+    nextGeneration = new GAAgent[SIZE];
+    for (int i = ELITE_NUM; i < SIZE; i++) {
+      nextGeneration[i] = new GAAgent();
+    }
+
+    // 2個体エリートを残す
+    for (int i = 0; i < ELITE_NUM; i++) {
+      nextGeneration[i] = currentGeneration[i].clone();
+    }
+
+    for (int nextAgentIndex = ELITE_NUM; nextAgentIndex < SIZE; nextAgentIndex += 2) {
+      int[] parentsIndex = select();
+      cross(parentsIndex, nextAgentIndex);
+
+      if (r.nextFloat() < MUTATE_PROB) {
+        mutate(nextAgentIndex);
+      }
+    }
+  }
+
   private void uniformCross(int[] parentsIndex, int resultIndex) {
-    // int sum = parentsIndex[0] + parentsIndex[1];
-    // for (int j = 0; j < GENE_LENGTH; j++) {
-    // // スコアが高い遺伝子ほど選ばれやすくする
-    // int ran = r.nextInt(sum);
-    // if (ran > parentsIndex[0]) {
-    // int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
-    // this.nextGeneration[resultIndex].setGene(j, parentsGeneA);
-    // } else {
-    // int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
-    // this.nextGeneration[resultIndex].setGene(j, parentsGeneB);
-    // }
-    // }
-    int geneLength = (1 << 16);
-
     int sum = parentsIndex[0] + parentsIndex[1];
-    float roulette = 1 - (float) parentsIndex[0] / (float) sum;
-    // System.out.println("parentsGene[0] : "+parentsGene[0]);
-    // System.out.println("parentsGene[1] : "+parentsGene[1]);
-    // System.out.println("roulette : "+roulette);
-    // int Acount=0,Bcount=0;
-    for (int k = 0; k < 2; k++) { // 2回繰り返す
-      for (int j = 0; j < geneLength; j++) {
-
-        float ran = (float) r.nextInt(sum) / (float) sum; // ルーレット作成
-        if (ran < roulette) { // 親A
-          // Acount++;
-          int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
-          nextGeneration[resultIndex + k].setGene(j, parentsGeneA);
-        } else if (ran > roulette) { // 親B
-          // Bcount++;
-          int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
-          nextGeneration[resultIndex + k].setGene(j, parentsGeneB);
-        } else { // エラー処理?
-
-        }
+    for (int j = 0; j < GENE_LENGTH; j++) {
+      // スコアが高い遺伝子ほど選ばれやすくする
+      int ran = r.nextInt(sum);
+      if (ran > parentsIndex[0]) {
+        int[] parentsGeneA = currentGeneration[parentsIndex[0]].getGene();
+        this.nextGeneration[resultIndex].setGene(j, parentsGeneA);
+      } else {
+        int[] parentsGeneB = currentGeneration[parentsIndex[1]].getGene();
+        this.nextGeneration[resultIndex].setGene(j, parentsGeneB);
       }
     }
   }
@@ -195,14 +186,18 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
     marioAIOptions.setAgent(agent);
     basicTask.setOptionsAndReset(marioAIOptions);
 
-    if (!basicTask.runSingleEpisode(1)) {
-      System.out.println("MarioAI: out of computational time"
-          + " per action! Agent disqualified!");
-    }
+    basicTask.runSingleEpisode(1);
+
     return basicTask;
   }
 
   private double scaleFitness(int fitness) {
     return fitness;
+  }
+
+  private void writeFile() {
+    String fileName = this.name + "-"
+        + GlobalOptions.getTimeStamp() + ".xml";
+    FileManager.write(currentGeneration[0], fileName);
   }
 }
