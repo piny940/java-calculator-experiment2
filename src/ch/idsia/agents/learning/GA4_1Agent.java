@@ -1,6 +1,6 @@
 package ch.idsia.agents.learning;
 
-public class GA4_1Agent extends GAAgent {
+public class GA4_1Agent extends GoRightAgent {
   int[] goRightGene = new int[GENE_LENGTH];
 
   public GA4_1Agent() {
@@ -11,7 +11,7 @@ public class GA4_1Agent extends GAAgent {
   @Override
   public boolean[] getAction() {
 
-    if (marioFloatPos[0] < 120) {
+    if (distancePassedCells < 120) {
       updateActionFromGene(goRightGene);
     } else {
       updateActionFromGene(gene);

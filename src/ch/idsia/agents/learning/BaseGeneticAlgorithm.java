@@ -9,7 +9,7 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.utils.FileManager;
 
-public class BaseGeneticAlgorithm implements GeneticAlgorithm {
+public class BaseGeneticAlgorithm {
   private final int SIZE = 100;
   private final int ELITE_NUM = 2;
   private final int MAX_GENERATION = 10000;
@@ -134,8 +134,8 @@ public class BaseGeneticAlgorithm implements GeneticAlgorithm {
         System.out.println(basicTask);
         return;
       }
-      currentGeneration[i].setFitness(evaluationInfo.distancePassedCells);
-      currentGeneration[i].setDistance(evaluationInfo.distancePassedCells);
+      currentGeneration[i].setFitness();
+      currentGeneration[i].setDistance();
     }
   }
 

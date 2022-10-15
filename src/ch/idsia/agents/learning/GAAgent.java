@@ -8,11 +8,11 @@ import java.util.Scanner;
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
 
-public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable {
+public abstract class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable {
   private static String name = "GAAgent";
   protected final int INPUT_NUM = 16;
   protected final int GENE_LENGTH = 1 << INPUT_NUM;
-  private int fitness = 0;
+  protected int fitness = 0;
   protected int[] gene = new int[GENE_LENGTH];
   private int distance = 0;
 
@@ -62,9 +62,7 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
     return this.fitness;
   }
 
-  public void setFitness(int fitness) {
-    this.fitness = fitness;
-  }
+  public abstract void setFitness();
 
   public int compareTo(Object object) {
     GAAgent otherAgent = (GAAgent) object;
@@ -83,8 +81,8 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
     return this.distance;
   }
 
-  public void setDistance(int distance) {
-    this.distance = distance;
+  public void setDistance() {
+    this.distance = distancePassedCells;
   }
 
   public boolean[] getAction() {

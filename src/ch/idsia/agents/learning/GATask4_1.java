@@ -9,7 +9,7 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.utils.FileManager;
 
-public class GATask4_1 implements GeneticAlgorithm {
+public class GATask4_1 {
   private final int SIZE = 100;
   private final int ELITE_NUM = 2;
   private final int MAX_GENERATION = 10000;
@@ -42,7 +42,7 @@ public class GATask4_1 implements GeneticAlgorithm {
           "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
               + "currentGeneration[0]Distance : "
               + currentGeneration[0].getDistance());
-      if (generation % 100 == 99) {
+      if (generation % 100 == 0) {
         writeFile();
         playMario(currentGeneration[0], true);
       }
@@ -133,8 +133,8 @@ public class GATask4_1 implements GeneticAlgorithm {
         System.out.println(basicTask);
         return;
       }
-      currentGeneration[i].setFitness(evaluationInfo.distancePassedCells);
-      currentGeneration[i].setDistance(evaluationInfo.distancePassedCells);
+      currentGeneration[i].setFitness();
+      currentGeneration[i].setDistance();
     }
   }
 
