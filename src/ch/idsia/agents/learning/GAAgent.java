@@ -1,6 +1,9 @@
 package ch.idsia.agents.learning;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.environments.Environment;
@@ -18,6 +21,7 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
   public GAAgent() {
     super(name);
     initializeGene();
+    loadGene("GATask4_1-2022-10-15_10-44-35.xml");
   }
 
   private void initializeGene() {
@@ -85,12 +89,8 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
   }
 
   public boolean[] getAction() {
-    int input = getGeneIndex();
-    int act = gene[input]; // 遺伝子のinput番目の数値を読み取る
-    for (int i = 0; i < Environment.numberOfKeys; i++) {
-      action[i] = (act % 2 == 1); // 2で割り切れるならtrue
-      act /= 2;
-    }
+
+    updateActionFromGene(gene);
 
     return action;
   }
@@ -121,10 +121,42 @@ public class GAAgent extends BasicMarioAIAgent implements Comparable, Cloneable 
     return result;
   }
 
+  private void updateActionFromGene(int[] gene) {
+    int input = getGeneIndex();
+    int act = gene[input]; // 遺伝子のinput番目の数値を読み取る
+    for (int i = 0; i < Environment.numberOfKeys; i++) {
+      action[i] = (act % 2 == 1); // 2で割り切れるならtrue
+      act /= 2;
+    }
+  }
+
   private double probe(int x, int y, byte[][] scene) {
     int realX = x + 11;
     int realY = y + 11;
     return (scene[realX][realY] != 0) ? 1 : 0;
+  }
+
+  private int[] loadGene(String filename) {
+    int[] gene = new int[GENE_LENGTH];
+
+    try {
+      File inputFile = new File(filename);
+      Scanner scanner = new Scanner(inputFile);
+
+      for (int i = 0; i < 1 << INPUT_NUM; i++) {
+        String line = scanner.next();
+        gene[i] = Integer.valueOf(line);
+      }
+
+      scanner.close();
+    } catch (FileNotFoundException ex) {
+      System.out.println("File not found");
+    }
+    return gene;
+  }
+
+  public void setGeneFromFile(String filename) {
+    this.gene = loadGene(filename);
   }
 
   @Override
