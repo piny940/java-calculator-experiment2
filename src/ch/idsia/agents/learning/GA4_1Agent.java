@@ -9,11 +9,11 @@ public class GA4_1Agent extends GoUpAgent {
 
   public GA4_1Agent() {
     super();
-    goRightGene = loadGene("GATask4_1-2022-10-15_10-44-35.xml");
-    goUpGene1 = loadGene("GATask4_1-2022-10-15_15-19-53.xml");
-    goUpGene2 = loadGene("GATask4_1-2022-10-15_15-53-02.xml");
-    goUpGene3 = loadGene("GATask4_1-2022-10-15_16-03-00.xml");
-    goUpGene4 = loadGene("GATask4_1-2022-10-15_16-11-52.xml");
+    goRightGene = loadGene("src/ch/idsia/genes/task4_1/GATask4_1-2022-10-15_10-44-35.xml");
+    goUpGene1 = loadGene("src/ch/idsia/genes/task4_1/GATask4_1-2022-10-15_15-19-53.xml");
+    goUpGene2 = loadGene("src/ch/idsia/genes/task4_1/GATask4_1-2022-10-15_15-53-02.xml");
+    goUpGene3 = loadGene("src/ch/idsia/genes/task4_1/GATask4_1-2022-10-15_16-03-00.xml");
+    goUpGene4 = loadGene("src/ch/idsia/genes/task4_1/GATask4_1-2022-10-15_16-11-52.xml");
   }
 
   @Override
