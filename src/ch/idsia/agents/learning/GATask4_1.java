@@ -43,6 +43,10 @@ public class GATask4_1 {
           "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
               + "currentGeneration[0]Distance : "
               + currentGeneration[0].getDistance());
+      if (currentGeneration[0].getDistance() >= 256) {
+        writeFile();
+        break;
+      }
       if ((generation + 1) % CHECK_PLAY_CYCLE == 0) {
         writeFile();
         playMario(currentGeneration[0], true);
