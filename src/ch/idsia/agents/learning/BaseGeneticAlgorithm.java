@@ -9,10 +9,12 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.utils.FileManager;
 
-public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
-  private final int SIZE = 100;
+public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
+  protected final int SIZE = 100;
   private final int ELITE_NUM = 2;
-  private final int MAX_GENERATION = 10000;
+  protected final int MAX_GENERATION = 10000;
+  protected final int CHECK_PLAY_CYCLE = 10;
+  protected final int GOAL_POS = 256;
   private final float MUTATE_PROB = 0.1f;
   private final int INPUT_NUM = 16;
   private final int GENE_LENGTH = 1 << INPUT_NUM;
@@ -22,14 +24,17 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
   private String name;
   private Random r = new Random();
 
-  public BaseGeneticAlgorithm(String marioAIOptions, String name,
-      CustomGAAgent[] initialCurrentGeneration,
-      CustomGAAgent[] initialNextGeneration) {
-    this.currentGeneration = initialCurrentGeneration;
-    this.nextGeneration = initialNextGeneration;
+  public BaseGeneticAlgorithm(String marioAIOptions, String name) {
     this.marioAIOptions = marioAIOptions;
     this.name = name;
+
+    this.currentGeneration = initializeCurrentGeneration();
+    this.currentGeneration = initializeNextGeneration();
   }
+
+  protected abstract GAAgent[] initializeCurrentGeneration();
+
+  protected abstract GAAgent[] initializeNextGeneration();
 
   public void learn() {
     for (int generation = 0; generation < MAX_GENERATION; generation++) {
@@ -43,7 +48,11 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
           "currentGeneration[0]Fitness : " + currentGeneration[0].getFitness() + "\n"
               + "currentGeneration[0]Distance : "
               + currentGeneration[0].getDistance());
-      if (generation % 100 == 99) {
+      if (currentGeneration[0].getDistance() >= GOAL_POS) {
+        writeFile();
+        break;
+      }
+      if ((generation + 1) % CHECK_PLAY_CYCLE == 0) {
         writeFile();
         playMario(currentGeneration[0], true);
       }
@@ -62,7 +71,7 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
     }
   }
 
-  private int[] select() {
+  protected int[] select() {
     /* 生存確率[i] = 適合度[i]/総計適合度 */
     double[] selectProbs = new double[SIZE]; // 各個体の生存確率
     double[] accumulateProbs = new double[SIZE]; // selectProbの累積値
@@ -110,11 +119,11 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
     return parentsIndex;
   }
 
-  private void cross(int[] parentsIndex, int resultIndex) {
+  protected void cross(int[] parentsIndex, int resultIndex) {
     uniformCross(parentsIndex, resultIndex);
   }
 
-  private void mutate(int mutateIndex) {
+  protected void mutate(int mutateIndex) {
     for (int index = 0; index < GENE_LENGTH; index++) {
       float ran = r.nextFloat();
       if (ran < MUTATE_PROB) {
@@ -123,7 +132,7 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
     }
   }
 
-  private void evaluate() {
+  protected void evaluate() {
     for (int i = 0; i < SIZE; i++) {
       BasicTask basicTask = playMario(currentGeneration[i], false);
 
@@ -140,7 +149,7 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
   }
 
   private void updateNextGeneration() {
-    initiateNextGeneration();
+    nextGeneration = initializeNextGeneration();
 
     // 2個体エリートを残す
     for (int i = 0; i < ELITE_NUM; i++) {
@@ -188,17 +197,8 @@ public class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
     return basicTask;
   }
 
-  private double scaleFitness(float fitness) {
+  protected double scaleFitness(float fitness) {
     return fitness;
-  }
-
-  private void initiateNextGeneration() {
-    GAAgent[] tmp = currentGeneration;
-    currentGeneration = nextGeneration;
-    nextGeneration = tmp;
-    for (int i = 0; i < SIZE; i++) {
-      nextGeneration[i].initializeGene();
-    }
   }
 
   private void writeFile() {
