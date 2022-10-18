@@ -1,0 +1,73 @@
+\documentclass[a4paper,11pt]{jsarticle}
+
+% 数式
+\usepackage{amsmath,amsfonts}
+\usepackage{bm}
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+% bibTeX
+\usepackage[backend = biber,style =apa, sorting =none,]{biblatex}
+
+% 参考文献ファイルのリスト
+\addbibresource{references.bib}
+
+% 等式番号を章ごとに割り振る
+\makeatletter
+\@addtoreset{equation}{section}
+\def\theequation{\thesection.\arabic{equation}}
+\makeatother
+
+\begin{document}
+
+\title{計算機科学実験2ソフトウェア報告書2}
+\author{安済翔真}
+\date{\today}
+\maketitle
+
+IgnoreObstacleAgentを拡張して敵のないシーン(MainTask2)のステージに取り組んだ。
+
+\section*{実施内容}
+
+まず、すでに実装されているIgnoreObstacleAgentを用いてMainTask2を実行した。
+IgnoreObstacleAgentでは穴を避ける処理が書かれていないため、図1のように穴へそのまま落下していった。
+
+\begin{figure}[h]
+  \centering
+  \includegraphics*[scale=0.3]{
+    images/report2/ignore-obstacle-fail.png
+  }
+  \caption[図1]{}
+\end{figure}
+
+そのため、次に、自身の目の前(1つ右のマス)に穴がある場合はジャンプするというコードを書いた。
+「穴」というのを表現するところで少し苦労した。例えば空中のブロックなどから落ちる場合などは、
+落ちても下に地面があり無駄にジャンプをする必要がないため、このようなケースを「目の前に穴がある場合」
+と区別しようとしたためである。これらを穴と区別しようとすると、
+「自身の足元の高さよりも下側にブロックがない」ということを確認する必要が生じ、MarioAIのコードに慣れて
+いないこともあってかなり苦労した。結局最終的には空中のブロックから落ちる場合なども区別せず、
+「自身の目の前の足元にブロックがなければジャンプをする」という方針で進めることにした。
+目の前に穴がある場合はジャンプする機能を実装した上で実行してみたところ、図2の赤丸の部分でジャンプをした時、
+勢いが足りずそのまま穴に落ちてしまった。そこで、resetメソッドの中でaction[Environment.SPEED\_KEY]を
+trueにすることで常に走った状態にし、勢いで穴を飛び越えることを試みた。その結果予想通り穴を飛び越え、
+ステージをクリアすることができた。
+
+\begin{figure}[h]
+  \centering
+  \includegraphics*[scale=0.6]{
+    images/report2/walking-jump.png
+  }
+  \caption[図2]{}
+\end{figure}
+
+\section*{実行結果}
+穴などをうまく飛び越え、ゴールに辿り着くことができた。
+
+\section*{結論と考察}
+今回は敵がいなかったため、SPEED\_KEYを常に押し続けた状態でもクリアできたが、Task3ではファイアボールを使う
+ためにSPEED\_KEYの扱いについてのコードも書く必要がある。また、ジャンプした先に穴がある場合はジャンプ
+しないようにする、といった処理も書く必要がある。今回は運よくこの実装でもクリアすることができたが、
+Task3に向けて改善していく必要があると感じた。
+
+\printbibliography[title=参考文献]
+
+\end{document}
