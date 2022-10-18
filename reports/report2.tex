@@ -5,6 +5,7 @@
 \usepackage{bm}
 % 画像
 \usepackage[dvipdfmx]{graphicx}
+\usepackage{wrapfig}
 % bibTeX
 \usepackage[backend = biber,style =apa, sorting =none,]{biblatex}
 
@@ -46,21 +47,27 @@ IgnoreObstacleAgentでは穴を避ける処理が書かれていないため、�
 「自身の足元の高さよりも下側にブロックがない」ということを確認する必要が生じ、MarioAIのコードに慣れて
 いないこともあってかなり苦労した。結局最終的には空中のブロックから落ちる場合なども区別せず、
 「自身の目の前の足元にブロックがなければジャンプをする」という方針で進めることにした。
+
+\begin{wrapfigure}{r}{50mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report2/walking-jump.png}
+    \caption[図2]{}
+  \end{center}
+\end{wrapfigure}
+
 目の前に穴がある場合はジャンプする機能を実装した上で実行してみたところ、図2の赤丸の部分でジャンプをした時、
 勢いが足りずそのまま穴に落ちてしまった。そこで、resetメソッドの中でaction[Environment.SPEED\_KEY]を
 trueにすることで常に走った状態にし、勢いで穴を飛び越えることを試みた。その結果予想通り穴を飛び越え、
 ステージをクリアすることができた。
 
-\begin{figure}[h]
-  \centering
-  \includegraphics*[scale=0.6]{
-    images/report2/walking-jump.png
-  }
-  \caption[図2]{}
-\end{figure}
-
 \section*{実行結果}
 穴などをうまく飛び越え、ゴールに辿り着くことができた。
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report2/reaching-goal.png}
+  \end{center}
+\end{wrapfigure}
 
 \section*{結論と考察}
 今回は敵がいなかったため、SPEED\_KEYを常に押し続けた状態でもクリアできたが、Task3ではファイアボールを使う
