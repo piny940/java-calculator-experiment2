@@ -8,6 +8,28 @@
 \usepackage{wrapfig}
 % bibTeX
 \usepackage[backend = biber,style =apa, sorting =none,]{biblatex}
+% listings(ソースコード)
+\usepackage{listings}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{}
 
 % 参考文献ファイルのリスト
 \addbibresource{references.bib}
@@ -61,7 +83,35 @@ trueにすることで常に走った状態にし、勢いで穴を飛び越え�
 ステージをクリアすることができた。
 
 \section*{実行結果}
-穴などをうまく飛び越え、ゴールに辿り着くことができた。
+
+\begin{lstlisting}[caption=実行結果]
+  [~ Mario AI Benchmark ~ 0.1.9]
+
+  [MarioAI] ~ Evaluation Results for Task: BasicTask
+          Evaluation lasted : 22918 ms
+           Weighted Fitness : 7360
+               Mario Status : WIN!
+                 Mario Mode : FIRE
+  Collisions with creatures : 0
+       Passed (Cells, Phys) : 256 of 256, 4096 of 4096 (100% passed)
+   Time Spent(marioseconds) : 37
+    Time Left(marioseconds) : 162
+               Coins Gained : 55 of 227 (24% collected)
+        Hidden Blocks Found : 0 of 0 (0% found)
+         Mushrooms Devoured : 0 of 0 found (0% collected)
+           Flowers Devoured : 0 of 3 found (0% collected)
+                kills Total : 0 of 0 found (0%)
+              kills By Fire : 0
+             kills By Shell : 0
+             kills By Stomp : 0
+      PunJ : 0
+  
+   min = 0.0
+   max = 0.0
+   ave = 0.0
+   sd  = NaN
+   n   = 1
+\end{lstlisting}
 
 \begin{wrapfigure}{r}{52mm}
   \begin{center}
