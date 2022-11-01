@@ -1,7 +1,5 @@
 package ch.idsia.agents.controllers;
 
-import ch.idsia.agents.Agent;
-import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.environments.Environment;
 
@@ -20,9 +18,6 @@ public class Task2Agent extends CustomBasicAgent {
   }
 
   public boolean[] getAction() {
-    if (isAboveEnemy()) {
-
-    }
     if (isFrontObstacle() || isFrontEnemy() || isFrontHole()) {
       action[Mario.KEY_JUMP] = isMarioAbleToJump || !isMarioOnGround;
     } else {
