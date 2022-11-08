@@ -173,4 +173,19 @@ public abstract class GAAgent extends BasicMarioAIAgent implements Comparable<GA
 
     return res;
   }
+
+  protected void switchGene(String filename, int[] gene) {
+    try {
+      File inputFile = new File(filename);
+      Scanner scanner = new Scanner(inputFile);
+
+      for (int i = 0; i < gene.length; i++) {
+        String line = scanner.next();
+        gene[i] = Integer.valueOf(line);
+      }
+      scanner.close();
+    } catch (FileNotFoundException ex) {
+      System.out.println("File not found");
+    }
+  }
 }
