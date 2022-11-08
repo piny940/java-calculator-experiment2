@@ -13,7 +13,8 @@ public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
   protected final int SIZE = 100;
   private final int ELITE_NUM = 2;
   protected final int MAX_GENERATION = 10000;
-  protected final int CHECK_PLAY_CYCLE = 10;
+  protected final int CHECK_PLAY_CYCLE = 100;
+  protected final int GENE_SAVE_CYCLE = 20;
   protected final int GOAL_POS = 256;
   protected float MUTATE_PROB = 0.15f;
   private final int INPUT_NUM = 16;
@@ -53,8 +54,10 @@ public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
         break;
       }
       if ((generation + 1) % CHECK_PLAY_CYCLE == 0) {
-        writeFile();
         playMario(currentGeneration[0], true);
+      }
+      if ((generation + 1) % GENE_SAVE_CYCLE == 0) {
+        writeFile();
       }
 
       updateNextGeneration();
