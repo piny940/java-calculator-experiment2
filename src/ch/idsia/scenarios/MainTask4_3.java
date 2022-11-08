@@ -42,17 +42,17 @@ import ch.idsia.agents.learning.GATask4_3;
 public final class MainTask4_3 {
     public static void main(String[] args) {
         GATask4_3 ga = new GATask4_3("-lde on -i off -ld 30 -ls 133434 -lhb on");
-        ga.learn();
-        // final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
+        // ga.learn();
+        final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-        // final Agent agent = new GA4_3Agent();
-        // marioAIOptions.setAgent(agent);
+        final Agent agent = new GA4_3Agent();
+        marioAIOptions.setAgent(agent);
 
-        // marioAIOptions.setArgs("-lde on -i off -ld 30 -ls 133434 -lhb on");
+        marioAIOptions.setArgs("-lde on -i off -ld 30 -ls 133434 -lhb on");
 
-        // final BasicTask basicTask = new BasicTask(marioAIOptions);
-        // basicTask.setOptionsAndReset(marioAIOptions);
-        // basicTask.doEpisodes(1,true,1);
+        final BasicTask basicTask = new BasicTask(marioAIOptions);
+        basicTask.setOptionsAndReset(marioAIOptions);
+        basicTask.doEpisodes(1,true,1);
         System.exit(0);
     }
 
