@@ -28,6 +28,16 @@ public class GA4_3Agent extends GoUpAgent {
 
   public GA4_3Agent() {
     initializeGene();
+    goUpGene1 = loadGene(gene1Path);
+    goUpGene2 = loadGene(gene2Path);
+    goUpGene3 = loadGene(gene3Path);
+    goUpGene4 = loadGene(gene4Path);
+    goUpGene5 = loadGene(gene5Path);
+    goUpGene6 = loadGene(gene6Path);
+    goUpGene7 = loadGene(gene7Path);
+    goUpGene8 = loadGene(gene8Path);
+    goUpGene9 = loadGene(gene9Path);
+    goUpGene10 = loadGene(gene10Path);
   }
 
   public boolean[] getAction() {
