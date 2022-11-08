@@ -1,7 +1,7 @@
 package ch.idsia.agents.learning;
 
 public class GATask4_3 extends BaseGeneticAlgorithm<GA4_3Agent> {
-  protected float MUTATE_PROB = 0.15f;
+  protected float MUTATE_PROB = 0.3f;
 
   public GATask4_3(String marioAIOptions) {
     super(marioAIOptions, "GATask4_3");

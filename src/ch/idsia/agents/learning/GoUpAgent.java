@@ -4,7 +4,7 @@ public class GoUpAgent extends GAAgent {
   protected float POINT_PER_SECOND_PER_HEIGHT = 0;
   protected float heightPoint = 0;
   protected float maxHeight = 0;
-  protected float MAX_HEIGHT_POINT_PER_HEIGHT = 1;
+  protected float MAX_HEIGHT_POINT_PER_HEIGHT = 5;
 
   public void setFitness() {
     this.fitness = (distancePassedCells) + heightPoint / timeSpent

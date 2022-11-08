@@ -11,6 +11,7 @@ public class GA4_3Agent extends GoUpAgent {
   private int[] goUpGene5;
   private int[] goUpGene6;
   private int[] goUpGene7;
+  private int[] goUpGene8;
 
   private String gene1Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-10-15_23-38-39.xml";
   private String gene2Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-10-16_00-04-25.xml";
@@ -19,6 +20,7 @@ public class GA4_3Agent extends GoUpAgent {
   private String gene5Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-11-06_21-49-52.xml";
   private String gene6Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-11-08_15-30-26.xml";
   private String gene7Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-11-08_16-56-04.xml";
+  private String gene8Path = "src/ch/idsia/genes/task4_3/GATask4_3-2022-11-08_18-47-09.xml";
 
   public GA4_3Agent() {
     initializeGene();
@@ -66,16 +68,23 @@ public class GA4_3Agent extends GoUpAgent {
       }
       goUpGene5 = null;
       updateActionFromGene(goUpGene6);
-    } else if (distancePassedCells < 150) {
+    } else if (distancePassedCells < 144) {
       // Use gene7
       if (goUpGene7 == null) {
-        goUpGene7 = loadGene(gene6Path);
+        goUpGene7 = loadGene(gene7Path);
       }
       goUpGene6 = null;
-      updateActionFromGene(goUpGene6);
+      updateActionFromGene(goUpGene7);
+    } else if (distancePassedCells < 180) {
+      // Use gene8
+      if (goUpGene8 == null) {
+        goUpGene8 = loadGene(gene8Path);
+      }
+      goUpGene7 = null;
+      updateActionFromGene(goUpGene8);
     } else {
       // Learning
-      goUpGene4 = null;
+      goUpGene8 = null;
       updateMarioModePoint();
       updateHeightPoint();
       updateActionFromGene(gene);
