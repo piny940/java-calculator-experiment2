@@ -22,7 +22,7 @@ public class LearningWithGA implements LearningAgent {
 	/* エリート数 */
 	final int ELITE_NUM = 2;
 
-	final float MUTATE_RATE = 0.1f;
+	final float MUTATE_RATE = 0.2f;
 	final float CROSS_RATE = 0.5f;
 
 	// private LearningTask task = null;

@@ -171,6 +171,7 @@ public abstract class BaseGeneticAlgorithm<CustomGAAgent extends GAAgent> {
 
   private void uniformCross(int[] parentsIndex, int resultIndex) {
     int sum = parentsIndex[0] + parentsIndex[1];
+    if (sum < 1) sum = 1;
     for (int j = 0; j < GENE_LENGTH; j++) {
       // スコアが高い遺伝子ほど選ばれやすくする
       int ran = r.nextInt(sum);
