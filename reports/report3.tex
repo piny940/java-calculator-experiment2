@@ -1,0 +1,130 @@
+\documentclass[a4paper,11pt]{jsarticle}
+
+% 数式
+\usepackage{amsmath,amsfonts}
+\usepackage{bm}
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{wrapfig}
+% bibTeX
+\usepackage[backend = biber,style =apa, sorting =none,]{biblatex}
+% listings(ソースコード)
+\usepackage{listings}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{}
+
+% 参考文献ファイルのリスト
+\addbibresource{references.bib}
+
+% 等式番号を章ごとに割り振る
+\makeatletter
+\@addtoreset{equation}{section}
+\def\theequation{\thesection.\arabic{equation}}
+\makeatother
+
+\begin{document}
+
+\title{計算機科学実験2ソフトウェア報告書3}
+\author{安済翔真}
+\date{\today}
+\maketitle
+
+Task2で用いたエージェント(以下Task2Agent)を改良してMainTask3に取り組んだ。
+
+\section*{実施内容}
+
+まず、すでに実装されているTask2Agentを用いてMainTask3を実行した。
+Task2Agentには敵を避けるコードが書かれていないため、敵に何度もぶつかって死んでしまった。
+
+\begin{figure}[h]
+  \centering
+  \includegraphics*[scale=0.3]{
+    images/report2/ignore-obstacle-fail.png
+  }
+  \caption[図1]{}
+\end{figure}
+
+そのため、次に、自身の目の前(1つ右のマス)に穴がある場合はジャンプするというコードを書いた。
+「穴」というのを表現するところで少し苦労した。例えば空中のブロックなどから落ちる場合などは、
+落ちても下に地面があり無駄にジャンプをする必要がないため、このようなケースを「目の前に穴がある場合」
+と区別しようとしたためである。これらを穴と区別しようとすると、
+「自身の足元の高さよりも下側にブロックがない」ということを確認する必要が生じ、MarioAIのコードに慣れて
+いないこともあってかなり苦労した。結局最終的には空中のブロックから落ちる場合なども区別せず、
+「自身の目の前の足元にブロックがなければジャンプをする」という方針で進めることにした。
+
+\begin{wrapfigure}{r}{50mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report2/walking-jump.png}
+    \caption[図2]{}
+  \end{center}
+\end{wrapfigure}
+
+目の前に穴がある場合はジャンプする機能を実装した上で実行してみたところ、図2の赤丸の部分でジャンプをした時、
+勢いが足りずそのまま穴に落ちてしまった。そこで、resetメソッドの中でaction[Environment.SPEED\_KEY]を
+trueにすることで常に走った状態にし、勢いで穴を飛び越えることを試みた。その結果予想通り穴を飛び越え、
+ステージをクリアすることができた。
+
+\section*{実行結果}
+
+\begin{lstlisting}[caption=実行結果]
+  [~ Mario AI Benchmark ~ 0.1.9]
+
+  [MarioAI] ~ Evaluation Results for Task: BasicTask
+          Evaluation lasted : 22918 ms
+           Weighted Fitness : 7360
+               Mario Status : WIN!
+                 Mario Mode : FIRE
+  Collisions with creatures : 0
+       Passed (Cells, Phys) : 256 of 256, 4096 of 4096 (100% passed)
+   Time Spent(marioseconds) : 37
+    Time Left(marioseconds) : 162
+               Coins Gained : 55 of 227 (24% collected)
+        Hidden Blocks Found : 0 of 0 (0% found)
+         Mushrooms Devoured : 0 of 0 found (0% collected)
+           Flowers Devoured : 0 of 3 found (0% collected)
+                kills Total : 0 of 0 found (0%)
+              kills By Fire : 0
+             kills By Shell : 0
+             kills By Stomp : 0
+      PunJ : 0
+  
+   min = 0.0
+   max = 0.0
+   ave = 0.0
+   sd  = NaN
+   n   = 1
+\end{lstlisting}
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report2/reaching-goal.png}
+  \end{center}
+\end{wrapfigure}
+
+\section*{結論と考察}
+今回は敵がいなかったため、SPEED\_KEYを常に押し続けた状態でもクリアできたが、Task3ではファイアボールを使う
+ためにSPEED\_KEYの扱いについてのコードも書く必要がある。また、ジャンプした先に穴がある場合はジャンプ
+しないようにする、といった処理も書く必要がある。今回は運よくこの実装でもクリアすることができたが、
+Task3に向けて改善していく必要があると感じた。
+
+\printbibliography[title=参考文献]
+
+\end{document}
