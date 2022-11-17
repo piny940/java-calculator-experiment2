@@ -172,6 +172,63 @@ LearningWithGAの実装を参考に、評価値の高い2個体はそのまま�
 課題4.3では敵の数が大幅に増加し、これまでの手法を単純に真似するだけでは学習の効率が悪いと考えられる。
 課題4.3に向けてより良い学習アルゴリズムを考える必要があると感じた。
 
+\section*{課題4.3}
+
+課題4.1, 4.2で用いた「コースの途中で使用する遺伝子を変える」という手法をベースとして課題4.3に取り組んだ。
+
+\subsection*{実施内容}
+
+まずは課題4.2で用いた遺伝的アルゴリズムをそのまま用いて学習を進めた。課題4.3のステージではスタート直後に大量の敵
+と大きな穴があるため、x = 21のあたりで学習が止まってしまった。そこで、突然変異の発生確率を10\%から15\%に
+上げて学習を行ったところ、はじめの大きな穴を飛び越えることができた。また、評価関数についても、今までは「
+マリオが到達した最も高い位置」だけを見て高さに関する評価を決めていたが、課題4.3ではそれに加えて「高いところにいた時間」
+も評価に加えた。それによってマリオがより高い位置を維持するようになり、敵を踏みつける確率が増えることを期待した。
+これによって何度か使う遺伝子を切り替えながらコースを順調に進んでいった。途中で課題4.2のように上のルートと下のルート
+で分岐する場面があったため、その近辺だけ高さに関する報酬を増やして上のルートを通るようにした。以上のような工夫により
+4.3のステージをクリアすることができた。
+
+\subsection*{実行結果}
+
+\begin{lstlisting}[caption=実行結果]
+  [~ Mario AI Benchmark ~ 0.1.9]
+
+  [MarioAI] ~ Evaluation Results for Task: BasicTask
+          Evaluation lasted : 30068 ms
+          Weighted Fitness : 7726
+              Mario Status : WIN!
+                Mario Mode : small
+  Collisions with creatures : 2
+      Passed (Cells, Phys) : 256 of 256, 4096 of 4096 (100% passed)
+  Time Spent(marioseconds) : 49
+    Time Left(marioseconds) : 151
+              Coins Gained : 8 of 70 (11% collected)
+        Hidden Blocks Found : 0 of 15 (0% found)
+        Mushrooms Devoured : 0 of 0 found (0% collected)
+          Flowers Devoured : 0 of 0 found (0% collected)
+                kills Total : 23 of 220 found (10%)
+              kills By Fire : 0
+            kills By Shell : 8
+            kills By Stomp : 14
+      PunJ : 0
+
+  min = 0.0
+  max = 0.0
+  ave = 0.0
+  sd  = NaN
+  n   = 1
+\end{lstlisting}
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+  \end{center}
+\end{wrapfigure}
+
+\subsection*{結論と考察}
+今回、１つのコースに対して複数の遺伝子を切り替えながら進めるという手法によって効率よく学習を進めることができた。
+一方、この方法では実行時に大量のメモリを消費したり、遺伝子のロードに時間がかかったりという課題点がある。
+単にコースをクリアしたからと言って満足するのではなくより良いアルゴリズムを考えていく必要があると感じた。
+
 \printbibliography[title=参考文献]
 
 \end{document}
