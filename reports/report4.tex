@@ -1,0 +1,177 @@
+\documentclass[a4paper,11pt]{jsarticle}
+
+% 数式
+\usepackage{amsmath,amsfonts}
+\usepackage{bm}
+% 画像
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{wrapfig}
+% bibTeX
+\usepackage[backend = biber,style =apa, sorting =none,]{biblatex}
+% listings(ソースコード)
+\usepackage{listings}
+% ハイパーリンク
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+
+\lstset{
+  basicstyle={\ttfamily},
+  identifierstyle={\small},
+  commentstyle={\smallitshape},
+  keywordstyle={\small\bfseries},
+  ndkeywordstyle={\small},
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},
+  numbers=left,
+  xrightmargin=0zw,
+  xleftmargin=3zw,
+  numberstyle={\scriptsize},
+  stepnumber=1,
+  numbersep=1zw,
+  lineskip=-0.5ex
+}
+\renewcommand{\lstlistingname}{}
+
+% 参考文献ファイルのリスト
+\addbibresource{references.bib}
+
+% 等式番号を章ごとに割り振る
+\makeatletter
+\@addtoreset{equation}{section}
+\def\theequation{\thesection.\arabic{equation}}
+\makeatother
+
+\begin{document}
+
+\title{計算機科学実験2ソフトウェア報告書4}
+\author{2021年度入学 学籍番号:1029-33-1415 安済翔真}
+\date{\today}
+\maketitle
+
+\section*{課題4.1}
+
+マリオAIのフォルダの中に合ったLearningWithGA.javaとGAAgent.javaをもとに課題4に取り組んだ。
+
+\subsection*{実施内容}
+
+課題4のコースは難易度が高いと聞いていたため、ルールベースでの実装はやめて遺伝的アルゴリズムを用いて
+取り組んだ。遺伝的アルゴリズムについてはwikipediaの
+\href{https://ja.wikipedia.org/wiki/
+%E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0}
+{遺伝的アルゴリズム}
+を参考にした。1世代あたりの個体数は100、交叉は一様交叉、突然変異の割合は全体の中から5\%の染色体に対して、
+染色体の5\%のビットを反転させるという方式をとった。次世代の染色体を作る際の選択の仕方については、
+LearningWithGAの実装を参考に、評価値の高い2個体はそのまま次世代にも採用し、それ以外については評価値の
+高い染色体ほど選ばれやすくなるような方式で選択を行った。
+評価関数について、まずはじめはマリオが死んだ段階でコースを何マス進むことができていたかを評価関数として用いた。
+しかしこの評価の方法では学習を第1000世代まで進めてもx = 130あたりにある高い壁を乗り越えることができなかった。
+そこで、壁を乗り越えるために、x = 110あたりからは評価関数に「マリオが死ぬまでに到達した高さの最大値」を
+加える方針をとった。その結果、マリオは画面外の高さまで到達してそのまま高い壁を乗り越えることができた。
+しかし、壁を乗り越えた後でも何度か学習が止まってしまった。そこで、突然変異の起こる確率を5\%から10\%に
+上げる方法を試した。その結果マリオが到達する距離は増加したが、ゴールにたどり着くまでに学習が止まってしまった。
+そこで、最後に、学習が止まった段階からまた別の遺伝子を新たに作成して、新しい遺伝子に従って行動を決定するよう
+プログラムを大幅に変更した。何度か遺伝子の切り替えを行った結果、ゴールにたどり着くことができた。
+
+\subsection*{実行結果}
+
+\begin{lstlisting}[caption=実行結果]
+  [~ Mario AI Benchmark ~ 0.1.9]
+
+  [MarioAI] ~ Evaluation Results for Task: BasicTask
+          Evaluation lasted : 26486 ms
+          Weighted Fitness : 9498
+              Mario Status : WIN!
+                Mario Mode : small
+  Collisions with creatures : 2
+      Passed (Cells, Phys) : 256 of 256, 4096 of 4096 (100% passed)
+  Time Spent(marioseconds) : 43
+    Time Left(marioseconds) : 156
+              Coins Gained : 74 of 381 (19% collected)
+        Hidden Blocks Found : 0 of 0 (0% found)
+        Mushrooms Devoured : 0 of 0 found (0% collected)
+          Flowers Devoured : 0 of 1 found (0% collected)
+                kills Total : 39 of 135 found (28%)
+              kills By Fire : 20
+            kills By Shell : 0
+            kills By Stomp : 19
+      PunJ : 0
+
+  min = 20.0
+  max = 20.0
+  ave = 20.0
+  sd  = NaN
+  n   = 1
+\end{lstlisting}
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+  \end{center}
+\end{wrapfigure}
+
+\subsection*{結論と考察}
+コースの途中で使用する遺伝子を変更するという方法を取ることで、効率的に学習を進めることができた。
+課題4.2や4.3についても同様の手法を用いてどこまで進むことができるか試していきたいと感じた。
+
+\section*{課題4.2}
+
+課題4.1で用いた「コースの途中で使用する遺伝子を変える」という手法をベースとして課題4.2に取り組んだ。
+
+\subsection*{実施内容}
+
+まずは課題4.1に取り組む際に用いたアルゴリズムを用いて課題4.2のコースでも学習を行った。課題4.1では高い壁
+を超えるために高さに関する評価値を多めに設定していたが、課題4.2においてはそれによって無駄にジャンプをしてしまったり、
+かえって前に進みにくくなるということが起こっていた。そのため、評価関数で用いたパラメータを少し変更し、高いところ
+に到達したときに与える報酬を課題4.1のときに比べて大幅に減らした。その結果、順調にコースを進むことが来た。
+途中、上と下に分かれる部分があったが、上のルートのほうが進む難易度が低かったためその近辺においては評価関数のパラメータ
+を一部変更して高いところに到達したときに与える報酬を増やし、上のルートをマリオが通るよう工夫した。下のルート
+を通っていたときは5マスほど進んだところでマリオが停止して学習が進まなくなっていたが、上のルートを通ることによって一気に30マスほど
+進むことができるようになった。そのまま学習を重ねた結果、見事ゴールに到達することができた。
+
+\subsection*{実行結果}
+
+\begin{lstlisting}[caption=実行結果]
+  [~ Mario AI Benchmark ~ 0.1.9]
+
+  [MarioAI] ~ Evaluation Results for Task: BasicTask
+          Evaluation lasted : 38827 ms
+          Weighted Fitness : 6304
+              Mario Status : WIN!
+                Mario Mode : small
+  Collisions with creatures : 2
+      Passed (Cells, Phys) : 256 of 256, 4096 of 4096 (100% passed)
+  Time Spent(marioseconds) : 63
+    Time Left(marioseconds) : 136
+              Coins Gained : 6 of 269 (2% collected)
+        Hidden Blocks Found : 0 of 0 (0% found)
+        Mushrooms Devoured : 0 of 3 found (0% collected)
+          Flowers Devoured : 0 of 0 found (0% collected)
+                kills Total : 0 of 0 found (0%)
+              kills By Fire : 0
+            kills By Shell : 0
+            kills By Stomp : 0
+      PunJ : 0
+
+  min = 0.0
+  max = 0.0
+  ave = 0.0
+  sd  = NaN
+  n   = 1
+\end{lstlisting}
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+  \end{center}
+\end{wrapfigure}
+
+\subsection*{結論と考察}
+課題4.1同様、コースの途中で使用する遺伝子や評価関数を変更するという方法を取ることで、効率的に学習を進めることができた。
+課題4.3では敵の数が大幅に増加し、これまでの手法を単純に真似するだけでは学習の効率が悪いと考えられる。
+課題4.3に向けてより良い学習アルゴリズムを考える必要があると感じた。
+
+\printbibliography[title=参考文献]
+
+\end{document}
