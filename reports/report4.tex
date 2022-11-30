@@ -62,13 +62,31 @@
 %E9%81%BA%E4%BC%9D%E7%9A%84%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0}
 {遺伝的アルゴリズム}
 を参考にした。1世代あたりの個体数は100、交叉は一様交叉、突然変異の割合は全体の中から5\%の染色体に対して、
-染色体の5\%のビットを反転させるという方式をとった。次世代の染色体を作る際の選択の仕方については、
+染色体の5\%のビットを反転させるという方式をとった。
+
+\begin{wrapfigure}{r}{50mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report4/mario-going-up1.png}
+    \caption[図1]{}
+  \end{center}
+\end{wrapfigure}
+
+次世代の染色体を作る際の選択の仕方については、
 LearningWithGAの実装を参考に、評価値の高い2個体はそのまま次世代にも採用し、それ以外については評価値の
 高い染色体ほど選ばれやすくなるような方式で選択を行った。
 評価関数について、まずはじめはマリオが死んだ段階でコースを何マス進むことができていたかを評価関数として用いた。
 しかしこの評価の方法では学習を第1000世代まで進めてもx = 130あたりにある高い壁を乗り越えることができなかった。
 そこで、壁を乗り越えるために、x = 110あたりからは評価関数に「マリオが死ぬまでに到達した高さの最大値」を
-加える方針をとった。その結果、マリオは画面外の高さまで到達してそのまま高い壁を乗り越えることができた。
+加える方針をとった。
+
+\begin{wrapfigure}{r}{50mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report4/mario-going-over-wall1.png}
+    \caption[図2]{}
+  \end{center}
+\end{wrapfigure}
+
+その結果、マリオは画面外の高さまで到達してそのまま高い壁を乗り越えることができた。(図1, 2)
 しかし、壁を乗り越えた後でも何度か学習が止まってしまった。そこで、突然変異の起こる確率を5\%から10\%に
 上げる方法を試した。その結果マリオが到達する距離は増加したが、ゴールにたどり着くまでに学習が止まってしまった。
 そこで、最後に、学習が止まった段階からまた別の遺伝子を新たに作成して、新しい遺伝子に従って行動を決定するよう
@@ -107,7 +125,7 @@ LearningWithGAの実装を参考に、評価値の高い2個体はそのまま�
 
 \begin{wrapfigure}{r}{52mm}
   \begin{center}
-    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+    \includegraphics*[width=50mm]{images/report4/reaching-goal1.png}
   \end{center}
 \end{wrapfigure}
 
@@ -161,11 +179,11 @@ LearningWithGAの実装を参考に、評価値の高い2個体はそのまま�
   n   = 1
 \end{lstlisting}
 
-\begin{wrapfigure}{r}{52mm}
+\begin{figure}[h]
   \begin{center}
-    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+    \includegraphics*[width=50mm]{images/report4/reaching-goal2.png}
   \end{center}
-\end{wrapfigure}
+\end{figure}
 
 \subsection*{結論と考察}
 課題4.1同様、コースの途中で使用する遺伝子や評価関数を変更するという方法を取ることで、効率的に学習を進めることができた。
@@ -183,9 +201,25 @@ LearningWithGAの実装を参考に、評価値の高い2個体はそのまま�
 上げて学習を行ったところ、はじめの大きな穴を飛び越えることができた。また、評価関数についても、今までは「
 マリオが到達した最も高い位置」だけを見て高さに関する評価を決めていたが、課題4.3ではそれに加えて「高いところにいた時間」
 も評価に加えた。それによってマリオがより高い位置を維持するようになり、敵を踏みつける確率が増えることを期待した。
-これによって何度か使う遺伝子を切り替えながらコースを順調に進んでいった。途中で課題4.2のように上のルートと下のルート
-で分岐する場面があったため、その近辺だけ高さに関する報酬を増やして上のルートを通るようにした。以上のような工夫により
+これによって何度か使う遺伝子を切り替えながらコースを順調に進んでいった。
+
+途中で課題4.2のように上のルートと下のルートで分岐する場面があったため、
+その近辺だけ高さに関する報酬を増やして上のルートを通るようにした。以上のような工夫により
 4.3のステージをクリアすることができた。
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report4/go-up-agent-from3.png}
+    \caption{この辺りから高さに関する報酬を増やす}
+  \end{center}
+\end{figure}
+
+\begin{wrapfigure}{r}{52mm}
+  \begin{center}
+    \includegraphics*[width=50mm]{images/report4/go-upper-route3.png}
+    \caption{期待通り上のルートを通る}
+  \end{center}
+\end{wrapfigure}
 
 \subsection*{実行結果}
 
@@ -220,7 +254,7 @@ LearningWithGAの実装を参考に、評価値の高い2個体はそのまま�
 
 \begin{wrapfigure}{r}{52mm}
   \begin{center}
-    \includegraphics*[width=50mm]{images/report3/reaching-goal.png}
+    \includegraphics*[width=50mm]{images/report4/reaching-goal3.png}
   \end{center}
 \end{wrapfigure}
 
